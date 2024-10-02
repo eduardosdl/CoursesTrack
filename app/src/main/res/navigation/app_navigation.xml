@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.coursestrack.ui.home.HomeFragment"
+        android:name="com.eduardosdl.coursestrack.ui.home.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home">
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.coursestrack.ui.auth.LoginFragment"
+        android:name="com.eduardosdl.coursestrack.ui.auth.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.coursestrack.ui.auth.RegisterFragment"
+        android:name="com.eduardosdl.coursestrack.ui.auth.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
@@ -59,31 +59,31 @@
     </fragment>
     <fragment
         android:id="@+id/createCourseFragment"
-        android:name="com.example.coursestrack.ui.course.CreateCourseFragment"
+        android:name="com.eduardosdl.coursestrack.ui.course.CreateCourseFragment"
         android:label="Criar Curso"
         tools:layout="@layout/fragment_create_course" />
     <fragment
         android:id="@+id/institutionFragment"
-        android:name="com.example.coursestrack.ui.institution.InstitutionFragment"
+        android:name="com.eduardosdl.coursestrack.ui.institution.InstitutionFragment"
         android:label="Instituições"
         tools:layout="@layout/fragment_institution" />
     <fragment
         android:id="@+id/matterFragment"
-        android:name="com.example.coursestrack.ui.matter.MatterFragment"
+        android:name="com.eduardosdl.coursestrack.ui.matter.MatterFragment"
         android:label="Matérias"
         tools:layout="@layout/fragment_matter" />
     <fragment
         android:id="@+id/editCourseFragment"
-        android:name="com.example.coursestrack.ui.course.EditCourseFragment"
+        android:name="com.eduardosdl.coursestrack.ui.course.EditCourseFragment"
         android:label="EditCourseFragment" />
     <fragment
         android:id="@+id/detailsCourseFragment"
-        android:name="com.example.coursestrack.ui.course.DetailsCourseFragment"
+        android:name="com.eduardosdl.coursestrack.ui.course.DetailsCourseFragment"
         android:label="fragment_details_course"
         tools:layout="@layout/fragment_details_course">
         <argument
             android:name="courseData"
-            app:argType="com.example.coursestrack.data.model.Course" />
+            app:argType="com.eduardosdl.coursestrack.data.model.Course" />
         <action
             android:id="@+id/action_detailsCourseFragment_to_editCourseFragment"
             app:destination="@id/editCourseFragment" />

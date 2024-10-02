@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.coursestrack"
+    namespace = "com.eduardosdl.coursestrack"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.coursestrack"
+        applicationId = "com.eduardosdl.coursestrack"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
