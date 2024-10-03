@@ -82,4 +82,30 @@ class MatterRepositoryFirebase @Inject constructor(
             result(UiState.Failure("Matter ID not found"))
         }
     }
+
+    override fun deleteAllMatters(result: (UiState<String>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return result.invoke(UiState.Failure("User ID não encontrado"))
+
+        firestore.collection("matters")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        result.invoke(UiState.Success("Matérias excluidas com sucesso"))
+                    }
+                    .addOnFailureListener { e ->
+                        result.invoke(UiState.Failure("Erro ao matérias os cursos, tente novamente mais tarde"))
+                        Log.d("my-app-erros", "Erro ao excluir matérias: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                result.invoke(UiState.Failure("Erro ao buscar matérias, tente novamente mais tarde"))
+                Log.d("my-app-erros", "Erro ao buscar matérias para exclusão: $e")
+            }
+    }
 }

@@ -8,4 +8,5 @@ interface MatterRepository {
     fun createMatter(name: String, result: (UiState<Matter>) -> Unit)
     fun deleteMatter(matterId: String, result: (UiState<String>) -> Unit)
     fun updateMatterName(matter: Matter, newName: String, result: (UiState<String>) -> Unit)
+    fun deleteAllMatters(result: (UiState<String>) -> Unit)
 }

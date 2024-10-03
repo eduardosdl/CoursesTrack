@@ -8,6 +8,7 @@ import com.eduardosdl.coursestrack.util.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import javax.inject.Inject
 
 class CourseRepositoryFirebase(
     private val firestore: FirebaseFirestore,
@@ -153,6 +154,32 @@ class CourseRepositoryFirebase(
             .addOnFailureListener { e ->
                 result.invoke(UiState.Failure("Houve um erro na atualização do curso, tente novamente mais tarde"))
                 Log.d("my-app-erros", "firestore error to update course: $e")
+            }
+    }
+
+    override fun deleteAllCourses(result: (UiState<String>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return result(UiState.Failure("User ID not found"))
+
+        firestore.collection("courses")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        result.invoke(UiState.Success("Cursos excluidos com sucesso"))
+                    }
+                    .addOnFailureListener { e ->
+                        result.invoke(UiState.Failure("Erro ao excluir os cursos, tente novamente mais tarde"))
+                        Log.d("my-app-erros", "Erro ao excluir cursos: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                result.invoke(UiState.Failure("Erro ao buscar cursos, tente novamente mais tarde"))
+                Log.d("my-app-erros", "Erro ao buscar cursos para exclusão: $e")
             }
     }
 }

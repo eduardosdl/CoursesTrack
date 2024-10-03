@@ -1,7 +1,9 @@
 package com.eduardosdl.coursestrack
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -11,6 +13,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.eduardosdl.coursestrack.databinding.ActivityMainBinding
+import com.eduardosdl.coursestrack.ui.dialogs.DeleteDialog
+import com.eduardosdl.coursestrack.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +45,24 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(R.id.loginFragment)
                     }
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+
+                R.id.delete_account_btn -> {
+                    DeleteDialog("sua conta permanentemente ?") {
+                        viewModel.deleteUser { state ->
+                            when(state) {
+                                is UiState.Loading -> {}
+                                is UiState.Success -> {
+                                    Log.d("test", "entrou aqui")
+                                    navController.navigate(R.id.loginFragment)
+                                }
+                                is UiState.Failure -> {
+                                    Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                    }.show(supportFragmentManager, "deleteDialog")
                     true
                 }
 

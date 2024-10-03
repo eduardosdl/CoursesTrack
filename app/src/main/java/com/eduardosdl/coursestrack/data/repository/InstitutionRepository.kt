@@ -8,5 +8,5 @@ interface InstitutionRepository {
     fun createInstitution(name: String, result: (UiState<Institution>) -> Unit)
     fun deleteInstitution(institutionId: String, result: (UiState<String>) -> Unit)
     fun updateInstitutionName(institution: Institution, newName: String, result: (UiState<String>) -> Unit)
-
+    fun deleteAllInstitutions(result: (UiState<String>) -> Unit)
 }

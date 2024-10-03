@@ -21,8 +21,13 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(auth: FirebaseAuth): AuthRepository {
-        return AuthRepositoryFirebase(auth)
+    fun provideAuthRepository(
+        auth: FirebaseAuth,
+        course: CourseRepository,
+        institution: InstitutionRepository,
+        matter: MatterRepository
+    ): AuthRepository {
+        return AuthRepositoryFirebase(auth, course, institution, matter)
     }
 
     @Provides

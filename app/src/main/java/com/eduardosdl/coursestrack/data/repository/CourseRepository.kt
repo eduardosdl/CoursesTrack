@@ -26,4 +26,6 @@ interface CourseRepository {
     fun deleteCourse(course: Course, result: (UiState<String>) -> Unit)
 
     fun updateCourse(course: Course, matter: Matter, institution: Institution, result: (UiState<Course>) -> Unit)
+
+    fun deleteAllCourses(result: (UiState<String>) -> Unit)
 }

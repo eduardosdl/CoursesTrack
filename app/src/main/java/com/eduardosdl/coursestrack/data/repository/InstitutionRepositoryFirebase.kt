@@ -57,7 +57,11 @@ class InstitutionRepositoryFirebase(
             }
     }
 
-    override fun updateInstitutionName(institution: Institution, newName: String, result: (UiState<String>) -> Unit) {
+    override fun updateInstitutionName(
+        institution: Institution,
+        newName: String,
+        result: (UiState<String>) -> Unit
+    ) {
         if (institution.id != null) {
             firestore.collection("institutions").document(institution.id)
                 .update("name", newName)
@@ -71,5 +75,31 @@ class InstitutionRepositoryFirebase(
         } else {
             result(UiState.Failure("Institution ID not found"))
         }
+    }
+
+    override fun deleteAllInstitutions(result: (UiState<String>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return result.invoke(UiState.Failure("User ID não encontrado"))
+
+        firestore.collection("institutions")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        result.invoke(UiState.Success("Instituições excluidas com sucesso"))
+                    }
+                    .addOnFailureListener { e ->
+                        result.invoke(UiState.Failure("Erro ao excluir os instituições, tente novamente mais tarde"))
+                        Log.d("my-app-erros", "Erro ao excluir instituições: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                result.invoke(UiState.Failure("Erro ao buscar instituições, tente novamente mais tarde"))
+                Log.d("my-app-erros", "Erro ao buscar instituições para exclusão: $e")
+            }
     }
 }
