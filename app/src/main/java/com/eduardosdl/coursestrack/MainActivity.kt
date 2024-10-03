@@ -1,7 +1,6 @@
 package com.eduardosdl.coursestrack
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -51,12 +50,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.delete_account_btn -> {
                     DeleteDialog("sua conta permanentemente ?") {
                         viewModel.deleteUser { state ->
-                            when(state) {
+                            when (state) {
                                 is UiState.Loading -> {}
                                 is UiState.Success -> {
-                                    Log.d("test", "entrou aqui")
                                     navController.navigate(R.id.loginFragment)
+                                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                                 }
+
                                 is UiState.Failure -> {
                                     Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
                                 }
