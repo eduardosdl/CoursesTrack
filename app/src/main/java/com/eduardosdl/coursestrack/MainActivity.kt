@@ -1,5 +1,7 @@
 package com.eduardosdl.coursestrack
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -63,6 +65,15 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }.show(supportFragmentManager, "deleteDialog")
+                    true
+                }
+
+                R.id.privacy_policy -> {
+                    val privacyPolicyUrl = "https://eduardosdl.github.io/courses-track-docs/privacy-policy"
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(privacyPolicyUrl)
+                    startActivity(intent)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
 
