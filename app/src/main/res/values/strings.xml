@@ -3,4 +3,7 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sub_title">Tenha o controle de seus cursos na palma da mão</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="courses_track_slogan">Controle total dos seus cursos, onde você estiver</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

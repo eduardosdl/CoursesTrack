@@ -2,6 +2,7 @@ package com.eduardosdl.coursestrack.data.repository
 
 import android.util.Log
 import com.eduardosdl.coursestrack.util.UiState
+import com.eduardosdl.coursestrack.util.ViewModelState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,16 +29,16 @@ class AuthRepositoryFirebase @Inject constructor(
             }
     }
 
-    override fun loginUser(email: String, password: String, result: (UiState<String>) -> Unit) {
+    override fun loginUser(email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Login realizado com sucesso: ${auth.uid}")
-                    result.invoke(UiState.Success("Login realizado com sucesso"))
+                    onSuccess.invoke(auth.uid.toString())
                 }
             }
             .addOnFailureListener {
-                result.invoke(UiState.Failure("Falha na autenticação. Verifique email e senha"))
+                onFailure.invoke("Falha na autenticação. Verifique email e senha")
             }
     }
 
