@@ -27,9 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.eduardosdl.coursestrack.R
 import com.eduardosdl.coursestrack.ui.shared.Button
 import com.eduardosdl.coursestrack.ui.shared.OutlinedPasswordField
 import com.eduardosdl.coursestrack.ui.shared.WordMark
@@ -89,7 +91,7 @@ fun LoginContent(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
@@ -99,11 +101,11 @@ fun LoginContent(
             OutlinedPasswordField(
                 password,
                 onPasswordChange = { password = it },
-                label = "Senha",
+                label = stringResource(R.string.password),
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "Esqueceu a senha ?",
+                text = stringResource(R.string.forget_password),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -124,7 +126,7 @@ fun LoginContent(
 
             Button(
                 onClick = { onLogin(email, password) },
-                text = "Entrar",
+                text = stringResource(R.string.login),
                 modifier = Modifier.fillMaxWidth(),
                 isLoading = state is ViewModelState.Loading
             )
@@ -135,11 +137,11 @@ fun LoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Ainda não possui uma conta? ",
+                    text = stringResource(R.string.create_account_question),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "Criar Conta",
+                    text = stringResource(R.string.create_accoumt),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,

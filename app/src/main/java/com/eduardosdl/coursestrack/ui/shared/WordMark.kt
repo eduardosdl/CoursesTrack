@@ -40,7 +40,7 @@ fun WordMark() {
             fontSize = 36.sp
         )
         Text(
-            text = stringResource(R.string.courses_track_slogan),
+            text = stringResource(R.string.subtitle),
             style = MaterialTheme.typography.bodySmall
         )
     }
