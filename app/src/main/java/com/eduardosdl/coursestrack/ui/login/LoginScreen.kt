@@ -13,9 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.eduardosdl.coursestrack.R
 import com.eduardosdl.coursestrack.ui.shared.Button
 import com.eduardosdl.coursestrack.ui.shared.OutlinedPasswordField
+import com.eduardosdl.coursestrack.ui.shared.TextField
 import com.eduardosdl.coursestrack.ui.shared.WordMark
 import com.eduardosdl.coursestrack.util.ViewModelState
 
@@ -75,6 +77,19 @@ fun LoginContent(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+
+    val isFormValid = email.isNotBlank() && password.isNotBlank()
+
+    fun handleLogin() {
+        if (isFormValid) {
+            onLogin(email, password)
+        } else {
+            emailError = email.isBlank()
+            passwordError = password.isBlank()
+        }
+    }
 
     Scaffold(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) { innerPadding ->
         Column(
@@ -86,24 +101,40 @@ fun LoginContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             WordMark()
+
             Spacer(modifier = Modifier.height(64.dp))
 
-            OutlinedTextField(
+            TextField(
                 value = email,
+                label = stringResource(R.string.email),
+                isError = emailError,
                 onValueChange = { email = it },
-                label = { Text(stringResource(R.string.email)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                onRemoveErrors = { emailError = false },
+                errorMessage = stringResource(R.string.email_required),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedPasswordField(
-                password,
-                onPasswordChange = { password = it },
+                value = password,
                 label = stringResource(R.string.password),
-                modifier = Modifier.fillMaxWidth()
+                isError = passwordError,
+                onValueChange = { password = it },
+                onRemoveErrors = { passwordError = false },
+                errorMessage = stringResource(R.string.password_required),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Send
+                ),
+                keyboardActions = KeyboardActions(onSend = {
+                    handleLogin()
+                })
             )
+
             Text(
                 text = stringResource(R.string.forget_password),
                 style = MaterialTheme.typography.bodyMedium,
@@ -125,7 +156,7 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(64.dp))
 
             Button(
-                onClick = { onLogin(email, password) },
+                onClick = { handleLogin() },
                 text = stringResource(R.string.login),
                 modifier = Modifier.fillMaxWidth(),
                 isLoading = state is ViewModelState.Loading
@@ -141,7 +172,7 @@ fun LoginContent(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = stringResource(R.string.create_accoumt),
+                    text = stringResource(R.string.create_account),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,

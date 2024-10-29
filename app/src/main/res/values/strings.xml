@@ -8,5 +8,7 @@
     <string name="forget_password">Esqueceu a senha ?</string>
     <string name="login">Entrar</string>
     <string name="create_account_question">Ainda não possui uma conta? </string>
-    <string name="create_accoumt">Criar Conta</string>
+    <string name="create_account">Criar Conta</string>
+    <string name="email_required">Email é obrigatório</string>
+    <string name="password_required">Senha é obrigatória</string>
 </resources>
