@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">CoursesTrack</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="sub_title">Tenha o controle de seus cursos na palma da mão</string>
+    <string name="app_name" translatable="false">CoursesTrack</string>
+    <string name="subtitle">Controle total dos seus cursos, onde você estiver</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="hide_password">Esconder senha</string>
+    <string name="show_password">Mostrar senha</string>
+    <string name="forget_password">Esqueceu a senha ?</string>
+    <string name="login">Entrar</string>
+    <string name="create_account_question">Ainda não possui uma conta? </string>
+    <string name="create_account">Criar Conta</string>
+    <string name="email_required">Email é obrigatório</string>
+    <string name="password_required">Senha é obrigatória</string>
 </resources>
