@@ -1,5 +1,6 @@
 package com.eduardosdl.coursestrack.ui.shared
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,12 +31,13 @@ fun OutlinedPasswordField(
     value: String,
     label: String,
     isError: Boolean,
-    errorMessage: String,
-    onRemoveErrors: () -> Unit,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    @StringRes errorResource: Int? = null,
+    errorMessage: String = "",
+    onRemoveErrors: () -> Unit = {},
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -73,7 +75,7 @@ fun OutlinedPasswordField(
 
         AnimatedVisibility(visible = isError) {
             Text(
-                text = errorMessage,
+                text = errorResource?.run { stringResource(this) } ?: errorMessage,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier

@@ -1,5 +1,6 @@
 package com.eduardosdl.coursestrack.ui.shared
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -18,11 +20,12 @@ fun TextField(
     value: String,
     label: String,
     isError: Boolean,
-    errorMessage: String,
-    onRemoveErrors: () -> Unit,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions,
     modifier: Modifier = Modifier,
+    @StringRes errorResource: Int? = null,
+    errorMessage: String = "",
+    onRemoveErrors: () -> Unit = {},
 ) {
     Column {
         OutlinedTextField(
@@ -39,7 +42,7 @@ fun TextField(
 
         AnimatedVisibility(visible = isError) {
             Text(
-                text = errorMessage,
+                text = errorResource?.run { stringResource(this) } ?: errorMessage,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
