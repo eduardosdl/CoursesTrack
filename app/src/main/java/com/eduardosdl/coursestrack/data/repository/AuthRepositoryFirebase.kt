@@ -2,7 +2,6 @@ package com.eduardosdl.coursestrack.data.repository
 
 import android.util.Log
 import com.eduardosdl.coursestrack.util.UiState
-import com.eduardosdl.coursestrack.util.ViewModelState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,20 +15,30 @@ class AuthRepositoryFirebase @Inject constructor(
 ) : AuthRepository {
     val TAG: String = "AuthRepository"
 
-    override fun registerUser(email: String, password: String, result: (UiState<String>) -> Unit) {
+    override fun registerUser(
+        email: String,
+        password: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("my-app", "Usuário criado com sucesso: ${auth.uid}")
-                    result.invoke(UiState.Success("Registro realizado com sucesso"))
+                    onSuccess.invoke("Registro realizado com sucesso")
                 }
             }
             .addOnFailureListener {
-                result.invoke(UiState.Failure("Falha na criação"))
+                onFailure.invoke("Falha na criação")
             }
     }
 
-    override fun loginUser(email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    override fun loginUser(
+        email: String,
+        password: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -86,30 +95,31 @@ class AuthRepositoryFirebase @Inject constructor(
         }
     }
 
-    private suspend fun deleteUserData(result: (UiState<String>) -> Unit) = withContext(Dispatchers.IO) {
-        try {
-            course.deleteAllCourses { courseResult ->
-                if (courseResult is UiState.Failure) {
-                    throw Exception(courseResult.error)
+    private suspend fun deleteUserData(result: (UiState<String>) -> Unit) =
+        withContext(Dispatchers.IO) {
+            try {
+                course.deleteAllCourses { courseResult ->
+                    if (courseResult is UiState.Failure) {
+                        throw Exception(courseResult.error)
+                    }
                 }
-            }
 
-            institution.deleteAllInstitutions { institutionResult ->
-                if (institutionResult is UiState.Failure) {
-                    throw Exception(institutionResult.error)
+                institution.deleteAllInstitutions { institutionResult ->
+                    if (institutionResult is UiState.Failure) {
+                        throw Exception(institutionResult.error)
+                    }
                 }
-            }
 
-            matter.deleteAllMatters { matterResult ->
-                if (matterResult is UiState.Failure) {
-                    throw Exception(matterResult.error)
+                matter.deleteAllMatters { matterResult ->
+                    if (matterResult is UiState.Failure) {
+                        throw Exception(matterResult.error)
+                    }
                 }
-            }
 
-            result.invoke(UiState.Success("Dados do usuário excluídos com sucesso"))
-        } catch (e: Exception) {
-            result.invoke(UiState.Failure(e.message ?: "Erro ao excluir dados do usuário"))
+                result.invoke(UiState.Success("Dados do usuário excluídos com sucesso"))
+            } catch (e: Exception) {
+                result.invoke(UiState.Failure(e.message ?: "Erro ao excluir dados do usuário"))
+            }
         }
-    }
 
 }
