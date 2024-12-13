@@ -18,19 +18,19 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
     private val _formState = MutableStateFlow(RegisterState())
     val formState: StateFlow<RegisterState> = _formState
 
-    fun onEvent(event: RegisterEvent) {
+    fun onFormChange(event: FieldEvent) {
         when (event) {
-            is RegisterEvent.EmailChanged -> {
+            is FieldEvent.EmailChanged -> {
                 _formState.value = _formState.value.copy(email = event.email)
                 validateEmail()
             }
 
-            is RegisterEvent.PasswordChanged -> {
+            is FieldEvent.PasswordChanged -> {
                 _formState.value = _formState.value.copy(password = event.password)
                 validatePassword()
             }
 
-            is RegisterEvent.ConfirmPasswordChanged -> {
+            is FieldEvent.ConfirmPasswordChanged -> {
                 _formState.value = _formState.value.copy(confirmPassword = event.confirmPassword)
                 validateConfirmPassword()
             }
@@ -97,10 +97,10 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
         return true
     }
 
-    sealed class RegisterEvent {
-        data class EmailChanged(val email: String) : RegisterEvent()
-        data class PasswordChanged(val password: String) : RegisterEvent()
-        data class ConfirmPasswordChanged(val confirmPassword: String) : RegisterEvent()
+    sealed class FieldEvent {
+        data class EmailChanged(val email: String) : FieldEvent()
+        data class PasswordChanged(val password: String) : FieldEvent()
+        data class ConfirmPasswordChanged(val confirmPassword: String) : FieldEvent()
     }
 
     data class RegisterState(
