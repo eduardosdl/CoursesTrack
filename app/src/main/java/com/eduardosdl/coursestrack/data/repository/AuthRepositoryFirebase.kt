@@ -65,7 +65,7 @@ class AuthRepositoryFirebase @Inject constructor(
         result.invoke()
     }
 
-    override suspend fun deleteUser(result: (UiState<String>) -> Unit) {
+    override fun deleteUser(result: (UiState<String>) -> Unit) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
@@ -95,31 +95,30 @@ class AuthRepositoryFirebase @Inject constructor(
         }
     }
 
-    private suspend fun deleteUserData(result: (UiState<String>) -> Unit) =
-        withContext(Dispatchers.IO) {
-            try {
-                course.deleteAllCourses { courseResult ->
-                    if (courseResult is UiState.Failure) {
-                        throw Exception(courseResult.error)
-                    }
+    private fun deleteUserData(result: (UiState<String>) -> Unit) {
+        try {
+            course.deleteAllCourses { courseResult ->
+                if (courseResult is UiState.Failure) {
+                    throw Exception(courseResult.error)
                 }
-
-                institution.deleteAllInstitutions { institutionResult ->
-                    if (institutionResult is UiState.Failure) {
-                        throw Exception(institutionResult.error)
-                    }
-                }
-
-                matter.deleteAllMatters { matterResult ->
-                    if (matterResult is UiState.Failure) {
-                        throw Exception(matterResult.error)
-                    }
-                }
-
-                result.invoke(UiState.Success("Dados do usuário excluídos com sucesso"))
-            } catch (e: Exception) {
-                result.invoke(UiState.Failure(e.message ?: "Erro ao excluir dados do usuário"))
             }
+
+            institution.deleteAllInstitutions { institutionResult ->
+                if (institutionResult is UiState.Failure) {
+                    throw Exception(institutionResult.error)
+                }
+            }
+
+            matter.deleteAllMatters { matterResult ->
+                if (matterResult is UiState.Failure) {
+                    throw Exception(matterResult.error)
+                }
+            }
+
+            result.invoke(UiState.Success("Dados do usuário excluídos com sucesso"))
+        } catch (e: Exception) {
+            result.invoke(UiState.Failure(e.message ?: "Erro ao excluir dados do usuário"))
         }
+    }
 
 }

@@ -7,5 +7,5 @@ interface AuthRepository {
     fun loginUser(email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit)
     fun getSession(result: (id: String?) -> Unit)
     fun logout(result:() -> Unit)
-    suspend fun deleteUser(result: (UiState<String>) -> Unit)
+    fun deleteUser(result: (UiState<String>) -> Unit)
 }
