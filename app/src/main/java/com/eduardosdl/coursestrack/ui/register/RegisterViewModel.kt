@@ -88,7 +88,7 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
     }
 
     private fun validateConfirmPassword(): Boolean {
-        if (_formState.value.confirmPassword.length != _formState.value.password.length) {
+        if (_formState.value.confirmPassword != _formState.value.password) {
             _formState.value =
                 _formState.value.copy(confirmPasswordError = R.string.password_not_match)
             return false
