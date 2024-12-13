@@ -25,7 +25,7 @@ class RegisterFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 CoursesTrackTheme {
-                    RegisterScreen(
+                    RegisterRouter(
                         viewModel = viewModel,
                         onRegisterSuccess = {
                             findNavController().navigate(R.id.action_registerFragment_to_home_navigation)

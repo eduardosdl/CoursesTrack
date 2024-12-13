@@ -37,14 +37,14 @@ import com.eduardosdl.coursestrack.ui.uikit.WordMark
 import com.eduardosdl.coursestrack.util.ViewModelState
 
 @Composable
-fun RegisterScreen(
+fun RegisterRouter(
     viewModel: RegisterViewModel,
     onRegisterSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.register.collectAsState()
 
-    RegisterContent(
+    RegisterScreen(
         state = state,
         handleRegister = viewModel::registerUser,
         onNavigateToLogin = onNavigateToLogin,
@@ -65,7 +65,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun RegisterContent(
+fun RegisterScreen(
     state: ViewModelState<String>,
     handleRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
