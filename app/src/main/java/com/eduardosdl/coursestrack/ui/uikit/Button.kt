@@ -1,4 +1,4 @@
-package com.eduardosdl.coursestrack.ui.shared
+package com.eduardosdl.coursestrack.ui.uikit
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape

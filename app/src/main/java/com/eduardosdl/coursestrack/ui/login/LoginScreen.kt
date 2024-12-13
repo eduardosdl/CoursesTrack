@@ -33,10 +33,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.eduardosdl.coursestrack.R
-import com.eduardosdl.coursestrack.ui.shared.Button
-import com.eduardosdl.coursestrack.ui.shared.OutlinedPasswordField
-import com.eduardosdl.coursestrack.ui.shared.TextField
-import com.eduardosdl.coursestrack.ui.shared.WordMark
+import com.eduardosdl.coursestrack.ui.uikit.Button
+import com.eduardosdl.coursestrack.ui.uikit.OutlinedPasswordField
+import com.eduardosdl.coursestrack.ui.uikit.TextField
+import com.eduardosdl.coursestrack.ui.uikit.WordMark
 import com.eduardosdl.coursestrack.util.ViewModelState
 
 @Composable

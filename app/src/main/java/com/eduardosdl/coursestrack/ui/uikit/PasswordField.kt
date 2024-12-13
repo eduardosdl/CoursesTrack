@@ -1,4 +1,4 @@
-package com.eduardosdl.coursestrack.ui.shared
+package com.eduardosdl.coursestrack.ui.uikit
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
