@@ -43,12 +43,14 @@ fun RegisterRouter(
     onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.register.collectAsState()
+    val formState by viewModel.formState.collectAsState()
 
     RegisterScreen(
         state = state,
+        formState = formState,
+        onFormChange = viewModel::onFormChange,
         handleRegister = viewModel::registerUser,
-        onNavigateToLogin = onNavigateToLogin,
-        viewModel = viewModel
+        onNavigateToLogin = onNavigateToLogin
     )
 
     if (state is ViewModelState.Success) {
@@ -67,12 +69,11 @@ fun RegisterRouter(
 @Composable
 fun RegisterScreen(
     state: ViewModelState<String>,
+    formState: RegisterViewModel.RegisterState,
+    onFormChange: (RegisterViewModel.FieldEvent) -> Unit,
     handleRegister: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    viewModel: RegisterViewModel
+    onNavigateToLogin: () -> Unit
 ) {
-    val formState by viewModel.formState.collectAsState()
-
     Scaffold(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) { innerPadding ->
         Column(
             modifier = Modifier
@@ -90,7 +91,7 @@ fun RegisterScreen(
                 value = formState.email,
                 label = stringResource(R.string.email),
                 isError = formState.emailError != null,
-                onValueChange = { viewModel.onEvent(RegisterViewModel.RegisterEvent.EmailChanged(it)) },
+                onValueChange = { onFormChange(RegisterViewModel.FieldEvent.EmailChanged(it)) },
                 errorResource = formState.emailError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -105,8 +106,8 @@ fun RegisterScreen(
                 label = stringResource(R.string.password),
                 isError = formState.passwordError != null,
                 onValueChange = {
-                    viewModel.onEvent(
-                        RegisterViewModel.RegisterEvent.PasswordChanged(
+                    onFormChange(
+                        RegisterViewModel.FieldEvent.PasswordChanged(
                             it
                         )
                     )
@@ -125,8 +126,8 @@ fun RegisterScreen(
                 label = stringResource(R.string.password_confirm),
                 isError = formState.confirmPasswordError != null,
                 onValueChange = {
-                    viewModel.onEvent(
-                        RegisterViewModel.RegisterEvent.ConfirmPasswordChanged(
+                    onFormChange(
+                        RegisterViewModel.FieldEvent.ConfirmPasswordChanged(
                             it
                         )
                     )
