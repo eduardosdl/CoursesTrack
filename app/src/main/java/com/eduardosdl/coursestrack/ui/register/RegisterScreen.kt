@@ -1,4 +1,4 @@
-package com.eduardosdl.coursestrack.ui.login
+package com.eduardosdl.coursestrack.ui.register
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -21,9 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,21 +37,24 @@ import com.eduardosdl.coursestrack.ui.uikit.WordMark
 import com.eduardosdl.coursestrack.util.ViewModelState
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel,
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit
+fun RegisterRouter(
+    viewModel: RegisterViewModel,
+    onRegisterSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
-    val state by viewModel.login.collectAsState()
+    val state by viewModel.register.collectAsState()
+    val formState by viewModel.formState.collectAsState()
 
-    LoginContent(
+    RegisterScreen(
         state = state,
-        onLogin = viewModel::login,
-        onNavigateToRegister = onNavigateToRegister
+        formState = formState,
+        onFormChange = viewModel::onFormChange,
+        handleRegister = viewModel::registerUser,
+        onNavigateToLogin = onNavigateToLogin
     )
 
     if (state is ViewModelState.Success) {
-        onLoginSuccess()
+        onRegisterSuccess()
     }
 
     if (state is ViewModelState.Failure) {
@@ -64,33 +64,16 @@ fun LoginScreen(
             Toast.LENGTH_SHORT
         ).show()
     }
-
 }
 
 @Composable
-fun LoginContent(
+fun RegisterScreen(
     state: ViewModelState<String>,
-    onLogin: (String, String) -> Unit,
-    onNavigateToRegister: () -> Unit
+    formState: RegisterViewModel.RegisterState,
+    onFormChange: (RegisterViewModel.FieldEvent) -> Unit,
+    handleRegister: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var emailError by remember { mutableStateOf(false) }
-    var passwordError by remember { mutableStateOf(false) }
-
-    val isFormValid = email.isNotBlank() && password.isNotBlank()
-
-    fun handleLogin() {
-        if (isFormValid) {
-            onLogin(email, password)
-        } else {
-            emailError = email.isBlank()
-            passwordError = password.isBlank()
-        }
-    }
-
     Scaffold(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) { innerPadding ->
         Column(
             modifier = Modifier
@@ -105,12 +88,11 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(64.dp))
 
             TextField(
-                value = email,
+                value = formState.email,
                 label = stringResource(R.string.email),
-                isError = emailError,
-                onValueChange = { email = it },
-                onRemoveErrors = { emailError = false },
-                errorMessage = stringResource(R.string.email_required),
+                isError = formState.emailError != null,
+                onValueChange = { onFormChange(RegisterViewModel.FieldEvent.EmailChanged(it)) },
+                errorResource = formState.emailError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -120,44 +102,51 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedPasswordField(
-                value = password,
+                value = formState.password,
                 label = stringResource(R.string.password),
-                isError = passwordError,
-                onValueChange = { password = it },
-                onRemoveErrors = { passwordError = false },
-                errorMessage = stringResource(R.string.password_required),
+                isError = formState.passwordError != null,
+                onValueChange = {
+                    onFormChange(
+                        RegisterViewModel.FieldEvent.PasswordChanged(
+                            it
+                        )
+                    )
+                },
+                errorResource = formState.passwordError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedPasswordField(
+                value = formState.confirmPassword,
+                label = stringResource(R.string.password_confirm),
+                isError = formState.confirmPasswordError != null,
+                onValueChange = {
+                    onFormChange(
+                        RegisterViewModel.FieldEvent.ConfirmPasswordChanged(
+                            it
+                        )
+                    )
+                },
+                errorResource = formState.confirmPasswordError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Send
                 ),
                 keyboardActions = KeyboardActions(onSend = {
-                    handleLogin()
+                    handleRegister()
                 })
-            )
-
-            Text(
-                text = stringResource(R.string.forget_password),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clickable {
-                        Toast
-                            .makeText(
-                                context,
-                                "Equeceu a senha",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
-                    }
-                    .align(Alignment.End)
-                    .padding(top = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(64.dp))
 
             Button(
-                onClick = { handleLogin() },
-                text = stringResource(R.string.login),
+                onClick = { handleRegister() },
+                text = stringResource(R.string.create_account),
                 modifier = Modifier.fillMaxWidth(),
                 isLoading = state is ViewModelState.Loading
             )
@@ -168,16 +157,16 @@ fun LoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.create_account_question),
+                    text = stringResource(R.string.have_account_question),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = stringResource(R.string.create_account),
+                    text = stringResource(R.string.login),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
-                        onNavigateToRegister()
+                        onNavigateToLogin()
                     }
                 )
 

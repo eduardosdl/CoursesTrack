@@ -47,9 +47,8 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.eduardosdl.coursestrack.ui.auth.RegisterFragment"
-        android:label="Register"
-        tools:layout="@layout/fragment_register">
+        android:name="com.eduardosdl.coursestrack.ui.register.RegisterFragment"
+        android:label="Register">
         <action
             android:id="@+id/action_registerFragment_to_home_navigation"
             app:destination="@id/homeFragment"

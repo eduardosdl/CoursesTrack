@@ -1,4 +1,4 @@
-package com.eduardosdl.coursestrack.ui.shared
+package com.eduardosdl.coursestrack.ui.uikit
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme

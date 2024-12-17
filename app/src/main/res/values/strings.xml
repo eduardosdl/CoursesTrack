@@ -1,4 +1,5 @@
 <resources>
+<!--LoginScreen-->
     <string name="app_name" translatable="false">CoursesTrack</string>
     <string name="subtitle">Controle total dos seus cursos, onde você estiver</string>
     <string name="email">Email</string>
@@ -11,4 +12,11 @@
     <string name="create_account">Criar Conta</string>
     <string name="email_required">Email é obrigatório</string>
     <string name="password_required">Senha é obrigatória</string>
+
+    <!--RegisterScreen-->
+    <string name="email_invalid">Email inválido</string>
+    <string name="password_length">Senha deve ter no mínimo 6 caracteres</string>
+    <string name="password_confirm">Confirmar Senha</string>
+    <string name="password_not_match">Senhas são diferentes</string>
+    <string name="have_account_question">Já possui uma conta? </string>
 </resources>
