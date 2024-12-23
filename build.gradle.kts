@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.parcelize) apply false
     alias(libs.plugins.safe.args) apply false
+    alias(libs.plugins.detekt) apply true
 }

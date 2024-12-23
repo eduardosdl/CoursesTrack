@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.parcelize)
     alias(libs.plugins.safe.args)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -71,4 +72,17 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    ignoreFailures = true
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(true)
+    }
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("detekt")
 }
