@@ -3,7 +3,7 @@ package com.eduardosdl.coursestrack.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import calculateProgressPercentage
+import com.eduardosdl.coursestrack.util.calculateProgressPercentage
 import com.eduardosdl.coursestrack.data.model.Course
 import com.eduardosdl.coursestrack.databinding.ItemCourseCardBinding
 

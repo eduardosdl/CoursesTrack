@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.eduardosdl.coursestrack.data.model.Course
+import com.eduardosdl.coursestrack.data.model.CourseUpdateData
 import com.eduardosdl.coursestrack.data.model.Institution
 import com.eduardosdl.coursestrack.data.model.Matter
 import com.eduardosdl.coursestrack.data.repository.AuthRepository
@@ -29,18 +30,16 @@ class SharedViewModel @Inject constructor(
     }
 
     fun updateCourse(
-        course: Course,
-        name: String,
-        durationType: String,
-        duration: Long,
-        matter: Matter,
-        institution: Institution
+        course: Course, updateData: CourseUpdateData
     ) {
-        val updatedCourse =
-            course.copy(name = name, durationType = durationType, duration = duration)
+        val updatedCourse = course.copy(
+            name = updateData.name,
+            durationType = updateData.durationType,
+            duration = updateData.duration
+        )
         _selectedCourse.value = UiState.Loading
 
-        courseRepository.updateCourse(updatedCourse, matter, institution) {
+        courseRepository.updateCourse(updatedCourse, updateData.matter, updateData.institution) {
             _selectedCourse.value = it
         }
     }

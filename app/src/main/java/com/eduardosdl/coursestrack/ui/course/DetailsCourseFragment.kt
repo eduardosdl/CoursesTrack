@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import calculateProgressPercentage
+import com.eduardosdl.coursestrack.util.calculateProgressPercentage
 import com.eduardosdl.coursestrack.MainActivity
 import com.eduardosdl.coursestrack.R
 import com.eduardosdl.coursestrack.data.model.Course
@@ -21,6 +21,8 @@ import com.eduardosdl.coursestrack.ui.shared.SharedViewModel
 import com.eduardosdl.coursestrack.util.UiState
 import com.eduardosdl.coursestrack.util.limitTitleLength
 import dagger.hilt.android.AndroidEntryPoint
+
+private const val COURSE_NAME_LIMIT = 15
 
 @AndroidEntryPoint
 class DetailsCourseFragment : Fragment() {
@@ -109,7 +111,7 @@ class DetailsCourseFragment : Fragment() {
     }
 
     private fun populateWithCourseData(course: Course) {
-        (activity as MainActivity).updateToolbarTitle(course.name.limitTitleLength(15))
+        (activity as MainActivity).updateToolbarTitle(course.name.limitTitleLength(COURSE_NAME_LIMIT))
 
         binding.durationLabel.text =
             "${course.durationType} totais: ${course.duration}"
@@ -125,7 +127,7 @@ class DetailsCourseFragment : Fragment() {
         binding.institution.text = course.institutionName
 
         binding.updateProgressBtn.setOnClickListener {
-            UpdateProgressDialog(course) {
+            UpdateProgressDialog {
                 viewModel.updateProgress(course, it)
                 sharedViewModel.getCourse(course.id!!)
             }.show(parentFragmentManager, "progressDialog")

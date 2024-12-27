@@ -10,7 +10,6 @@ import com.eduardosdl.coursestrack.data.model.Course
 import com.eduardosdl.coursestrack.databinding.DialogProgressUpdateBinding
 
 class UpdateProgressDialog(
-    private val course: Course,
     private val saveProgress: (progress: Long) -> Unit
 ) : DialogFragment() {
     lateinit var binding: DialogProgressUpdateBinding

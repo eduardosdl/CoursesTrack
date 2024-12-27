@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
 
     private val courseAdapter = CourseAdapter(
         onProgressButtonClicked = { course ->
-            UpdateProgressDialog(course) {
+            UpdateProgressDialog {
                 viewModel.updateProgress(course, it)
             }.show(parentFragmentManager, "progressDialog")
         },
