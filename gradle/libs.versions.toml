@@ -16,6 +16,7 @@ kapt = "1.9.0"
 navigation = "2.8.1"
 parcelize = "1.9.0"
 safeArgs = "2.8.1"
+detekt = "1.23.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,3 +47,4 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms"}
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
 safe-args = { id = "androidx.navigation.safeargs", version.ref = "safeArgs" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

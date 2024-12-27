@@ -16,6 +16,7 @@ import com.eduardosdl.coursestrack.MainActivity
 import com.eduardosdl.coursestrack.R
 import com.eduardosdl.coursestrack.adapters.CustomArrayAdapter
 import com.eduardosdl.coursestrack.data.model.Course
+import com.eduardosdl.coursestrack.data.model.CourseUpdateData
 import com.eduardosdl.coursestrack.data.model.Institution
 import com.eduardosdl.coursestrack.data.model.Matter
 import com.eduardosdl.coursestrack.databinding.FragmentEditCourseBinding
@@ -27,9 +28,10 @@ import com.eduardosdl.coursestrack.util.UiState
 import com.eduardosdl.coursestrack.util.limitTitleLength
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val COURSE_NAME_LIMIT = 15
+
 @AndroidEntryPoint
 class EditCourseFragment : Fragment() {
-    private val viewModel: CourseViewModel by viewModels()
     private val matterViewModel: MatterViewModel by viewModels()
     private val institutionViewModel: InstitutionViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -172,7 +174,7 @@ class EditCourseFragment : Fragment() {
     }
 
     private fun populateWithCourseData(course: Course) {
-        (activity as MainActivity).updateToolbarTitle(course.name.limitTitleLength(15))
+        (activity as MainActivity).updateToolbarTitle(course.name.limitTitleLength(COURSE_NAME_LIMIT))
 
         binding.courseNameInput.setText(course.name)
 
@@ -188,14 +190,15 @@ class EditCourseFragment : Fragment() {
             val courseDurationType = getWorkloadSelected()
             val courseDuration = binding.courseDurationInput.text.toString().toLong()
 
-            sharedViewModel.updateCourse(
-                course,
-                courseName,
-                courseDurationType,
-                courseDuration,
-                selectedMatter!!,
-                selectedInstitution!!
+            val updateData = CourseUpdateData(
+                name = courseName,
+                durationType = courseDurationType,
+                duration = courseDuration,
+                matter = selectedMatter!!,
+                institution = selectedInstitution!!
             )
+
+            sharedViewModel.updateCourse(course, updateData)
 
             findNavController().popBackStack()
         }

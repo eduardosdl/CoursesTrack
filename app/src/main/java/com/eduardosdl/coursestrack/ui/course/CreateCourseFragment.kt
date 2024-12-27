@@ -22,6 +22,8 @@ import com.eduardosdl.coursestrack.ui.matter.MatterViewModel
 import com.eduardosdl.coursestrack.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val DROPDOWN_HEIGHT = 600
+
 @AndroidEntryPoint
 class CreateCourseFragment : Fragment() {
     private val viewModel: CourseViewModel by viewModels()
@@ -44,8 +46,8 @@ class CreateCourseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observer()
 
-        binding.courseMatterInput.dropDownHeight = 600
-        binding.courseInstitutionInput.dropDownHeight = 600
+        binding.courseMatterInput.dropDownHeight = DROPDOWN_HEIGHT
+        binding.courseInstitutionInput.dropDownHeight = DROPDOWN_HEIGHT
 
         setupInputListeners()
         checkFieldsForEmptyValues()

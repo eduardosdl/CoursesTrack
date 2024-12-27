@@ -121,7 +121,11 @@ class CourseRepositoryFirebase(
                 result.invoke(UiState.Success("Curso ${course.name} excluído com sucesso"))
             }
             .addOnFailureListener { e ->
-                result.invoke(UiState.Failure("Houve um erro ao deletar o curso ${course.name}, tente novamente mais tarde"))
+                result.invoke(
+                    UiState.Failure(
+                        "Houve um erro ao deletar o curso ${course.name}, tente novamente mais tarde"
+                    )
+                )
                 Log.d("my-app-erros", "firestore error to delete course: $e")
             }
     }

@@ -13,7 +13,7 @@ class AuthRepositoryFirebase @Inject constructor(
     val institution: InstitutionRepository,
     val matter: MatterRepository
 ) : AuthRepository {
-    val TAG: String = "AuthRepository"
+    val tag: String = "AuthRepository"
 
     override fun registerUser(email: String, password: String, result: (UiState<String>) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -32,7 +32,7 @@ class AuthRepositoryFirebase @Inject constructor(
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "Login realizado com sucesso: ${auth.uid}")
+                    Log.d(tag, "Login realizado com sucesso: ${auth.uid}")
                     result.invoke(UiState.Success("Login realizado com sucesso"))
                 }
             }
@@ -71,16 +71,16 @@ class AuthRepositoryFirebase @Inject constructor(
                             result.invoke(UiState.Success("Conta excluída com sucesso"))
                         } else {
                             result.invoke(UiState.Failure("Falha ao excluir a conta"))
-                            Log.d(TAG, "firestore error to delete user")
+                            Log.d(tag, "firestore error to delete user")
                         }
                     }
                     .addOnFailureListener { e ->
                         result.invoke(UiState.Failure("Erro ao excluir a conta"))
-                        Log.d(TAG, "firestore error to delete user: $e")
+                        Log.d(tag, "firestore error to delete user: $e")
                     }
             }
         } else {
-            Log.d(TAG, "firestore error to delete user")
+            Log.d(tag, "firestore error to delete user")
             result.invoke(UiState.Failure("Nenhum usuário logado"))
         }
     }
