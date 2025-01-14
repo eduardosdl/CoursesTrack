@@ -32,9 +32,14 @@ class MatterViewModel @Inject constructor(
 
     fun getAllMatters() {
         _matters.value = UiState.Loading
-        matterRepository.getAllMattersByUser { result ->
-            _matters.value = result
-        }
+        matterRepository.getAllMattersByUser(
+            onSuccess = {
+                _matters.value = UiState.Success(it)
+            },
+            onFailure = {
+                _matters.value = UiState.Failure(it)
+            }
+        )
     }
 
     fun createMatter(name: String) {

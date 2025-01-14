@@ -30,9 +30,14 @@ class InstitutionViewModel @Inject constructor(
 
     fun getAllInstitutions() {
         _institutions.value = UiState.Loading
-        institutionRepository.getAllInstitutionsByUser { result ->
-            _institutions.value = result
-        }
+        institutionRepository.getAllInstitutionsByUser(
+            onSuccess = {
+                _institutions.value = UiState.Success(it)
+            },
+            onFailure = {
+                _institutions.value = UiState.Failure(it)
+            }
+        )
     }
 
     fun createInstitution(name: String) {

@@ -12,8 +12,8 @@ class MatterRepositoryFirebase @Inject constructor(
     private val auth: FirebaseAuth
 ) : MatterRepository {
 
-    override fun getAllMattersByUser(result: (UiState<List<Matter>>) -> Unit) {
-        val userId = auth.currentUser?.uid ?: return result(UiState.Failure("User ID not found"))
+    override fun getAllMattersByUser(onSuccess: (List<Matter>) -> Unit, onFailure: (String) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return onFailure("User ID not found")
 
         firestore.collection("matters")
             .whereEqualTo("userId", userId)
@@ -26,10 +26,10 @@ class MatterRepositoryFirebase @Inject constructor(
                         matters.add(matter)
                     }
                 }
-                result(UiState.Success(matters))
+                onSuccess(matters)
             }
             .addOnFailureListener { e ->
-                result(UiState.Failure(e.message ?: "Failed to get matters"))
+                onFailure(e.message ?: "Failed to get matters")
                 Log.d("my-app-errors", "Firestore error: $e")
             }
     }

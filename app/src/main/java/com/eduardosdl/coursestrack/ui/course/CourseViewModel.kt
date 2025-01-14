@@ -7,13 +7,20 @@ import com.eduardosdl.coursestrack.data.model.Course
 import com.eduardosdl.coursestrack.data.model.Institution
 import com.eduardosdl.coursestrack.data.model.Matter
 import com.eduardosdl.coursestrack.data.repository.CourseRepository
+import com.eduardosdl.coursestrack.data.repository.InstitutionRepository
+import com.eduardosdl.coursestrack.data.repository.MatterRepository
 import com.eduardosdl.coursestrack.util.UiState
+import com.eduardosdl.coursestrack.util.ViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class CourseViewModel @Inject constructor(
     private val courseRepository: CourseRepository,
+    private val institutionRepository: InstitutionRepository,
+    private val matterRepository: MatterRepository
 ) :
     ViewModel() {
     private val _newCourse = MutableLiveData<UiState<Course>>()
@@ -26,6 +33,37 @@ class CourseViewModel @Inject constructor(
 
     private val _deleteCourse = MutableLiveData<UiState<String>>()
     val deleteCourse: LiveData<UiState<String>> get() = _deleteCourse
+
+    private val _institutions =
+        MutableStateFlow<ViewModelState<List<Institution>>>(ViewModelState.Idle)
+    val institutions: StateFlow<ViewModelState<List<Institution>>> = _institutions
+
+    private val _matters = MutableStateFlow<ViewModelState<List<Matter>>>(ViewModelState.Idle)
+    val matters: StateFlow<ViewModelState<List<Matter>>> = _matters
+
+    fun getAllInstitutions() {
+        _institutions.value = ViewModelState.Loading
+        institutionRepository.getAllInstitutionsByUser(
+            onSuccess = {
+                _institutions.value = ViewModelState.Success(it)
+            },
+            onFailure = {
+                _institutions.value = ViewModelState.Failure(it)
+            }
+        )
+    }
+
+    fun getAllMatters() {
+        _matters.value = ViewModelState.Loading
+        matterRepository.getAllMattersByUser(
+            onSuccess = {
+                _matters.value = ViewModelState.Success(it)
+            },
+            onFailure = {
+                _matters.value = ViewModelState.Failure(it)
+            }
+        )
+    }
 
     fun createCourse(
         name: String,
