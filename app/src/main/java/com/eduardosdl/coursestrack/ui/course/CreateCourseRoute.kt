@@ -40,15 +40,26 @@ fun CreateCourseRoute(
 
     val institutionsState by viewModel.institutions.collectAsState()
     val mattersState by viewModel.matters.collectAsState()
+    val newCourseState by viewModel.newCourse.collectAsState()
+    val formState by viewModel.formState.collectAsState()
 
-    if (institutionsState is ViewModelState.Success && mattersState is ViewModelState.Success) {
-        CreateCourseContent(
-            institutions = (institutionsState as ViewModelState.Success).data,
-            matters = (mattersState as ViewModelState.Success).data,
-        )
+    val isLoading = institutionsState is ViewModelState.Loading
+    val isSaving = newCourseState is ViewModelState.Loading
+
+    val institutions = (institutionsState as? ViewModelState.Success)?.data ?: emptyList()
+    val matters = (mattersState as? ViewModelState.Success)?.data ?: emptyList()
+
+    CreateCourseContent(
+        institutions = institutions,
+        matters = matters,
+        formState = formState,
+        onFormChange = viewModel::onFormChange,
+        isLoadingSelections = isLoading,
+        isSaving = isSaving,
+
+    ) {
+        viewModel.createCourse()
     }
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +67,11 @@ fun CreateCourseRoute(
 fun CreateCourseContent(
     institutions: List<Institution>,
     matters: List<Matter>,
+    formState: CourseViewModel.CourseState,
+    onFormChange: (CourseViewModel.FieldEvent) -> Unit,
+    isLoadingSelections: Boolean = false,
+    isSaving: Boolean = false,
+    onSave: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -86,8 +102,13 @@ fun CreateCourseContent(
         ) {
             CourseForm(
                 institutionsOptions = institutions,
-                mattersOptions = matters
-            ) { }
+                mattersOptions = matters,
+                formState = formState,
+                onFormChange = onFormChange,
+                isLoadingSelections = isLoadingSelections,
+                isSaving = isSaving,
+                onSave = onSave
+            )
         }
     }
 }

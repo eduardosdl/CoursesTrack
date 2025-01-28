@@ -1,6 +1,7 @@
 package com.eduardosdl.coursestrack.data.repository
 
 import android.util.Log
+import com.eduardosdl.coursestrack.data.dto.CourseCreationDTO
 import com.eduardosdl.coursestrack.data.model.Course
 import com.eduardosdl.coursestrack.data.model.Institution
 import com.eduardosdl.coursestrack.data.model.Matter
@@ -8,39 +9,40 @@ import com.eduardosdl.coursestrack.util.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import javax.inject.Inject
 
 class CourseRepositoryFirebase(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ) : CourseRepository {
     override fun createCourse(
-        course: Course,
-        institution: Institution,
-        matter: Matter,
-        result: (UiState<Course>) -> Unit
+        courseData: CourseCreationDTO,
+        result: (UiState<Course>) -> Unit?,
+        onSuccess: (Course) -> Unit,
+        onFailure: (String) -> Unit
     ) {
         val document = firestore.collection("courses").document()
-        val institutionRef = institution.id?.let {
+        val institutionRef = courseData.institution.id?.let {
             firestore.collection("institutions").document(it)
         }
-        val matterRef = matter.id?.let {
+        val matterRef = courseData.matter.id?.let {
             firestore.collection("matters").document(it)
         }
-        val newCourse = course.copy(
+        val newCourse = Course(
             id = document.id,
             userId = auth.uid!!,
             progress = 0,
             institutionRef = institutionRef,
             matterRef = matterRef,
-            matterName = matter.name,
-            institutionName = institution.name
+            matterName = courseData.matter.name,
+            institutionName = courseData.institution.name
         )
 
         document.set(newCourse).addOnSuccessListener {
             result.invoke(UiState.Success(newCourse))
+            onSuccess.invoke(newCourse)
         }.addOnFailureListener { e ->
             result.invoke(UiState.Failure("Houve um erro na crição do curso, tente novamente mais tarde"))
+            onFailure.invoke("Houve um erro na crição do curso, tente novamente mais tarde")
             Log.d("my-app-erros", "firestore error to course course: $e")
         }
     }
